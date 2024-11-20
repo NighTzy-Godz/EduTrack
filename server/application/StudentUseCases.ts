@@ -7,8 +7,17 @@ class StudentUseCases{
     constructor(private studentRepository: IStudentRepository){}
 
     async createStudent(data: CreateStudentData): Promise<IStudent | void>{
-        data.student_id = generateStudentID()
-        return await this.studentRepository.createStudent(data)
+        try {
+            const {email} = data
+            const existingStudent = await this.studentRepository.findStudentByKey({email})
+            if(existingStudent) throw new Error('Student already exists with this email')
+
+            data.student_id = generateStudentID()
+            return await this.studentRepository.createStudent(data)
+        } catch (error) {
+            throw new Error('Error on Creating a student - ' + error)
+        }
+        
     }
 }
 

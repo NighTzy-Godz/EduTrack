@@ -15,6 +15,10 @@ class StudentRepository implements IStudentRepository{
         }
         
     }
+
+    async findStudentByKey<K extends keyof IStudent>(query: Record<K, IStudent[K]>): Promise<IStudent | null> {
+        return null
+    }
 }
 
 export default StudentRepository
